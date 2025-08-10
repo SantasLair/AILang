@@ -1,0 +1,5 @@
+@conf_action:
+%in:
+{ "list": [9,1,5,6,2,5], "confidence": 0.92 }
+%model:sort{algorithm=bubble}
+!if confidence >= 0.8 then emit high

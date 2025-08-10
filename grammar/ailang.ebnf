@@ -1,0 +1,64 @@
+AILang         = Task ;
+
+Task           = TaskDecl, { Statement } ;
+TaskDecl       = "@", Identifier, ":" ;
+
+Statement      = InputBlock
+               | ModelBlock
+               | OutputBlock
+               | LetDecl
+               | NodeDecl
+               | EdgeDecl
+               | ConditionDecl
+               | ActionDecl
+               ;
+
+InputBlock     = "%in:", BlockPayload ;
+ModelBlock     = "%model:", ModelType, ModelArgs ;
+OutputBlock    = "%out:", Identifier ;
+
+LetDecl        = "let", Identifier, "=", Expr ;
+
+ModelType      = Identifier ;
+ModelArgs      = "{", [ KeyValue, { ",", KeyValue } ], "}" ;
+KeyValue       = Identifier, "=", Value ;
+
+NodeDecl       = "+", Identifier, ":", TypeName, [ Range ] ;
+TypeName       = Identifier ;
+Range          = "[", RangeExpr, "]" ;
+RangeExpr      = Identifier | Number | String ;
+
+EdgeDecl       = "->", Identifier, "=>", Identifier ;
+
+ConditionDecl  = "?", ConditionExpr ;
+ConditionExpr  = Identifier, [ Comparator, Value ] ;
+Comparator     = "=" | "==" | ">=" | "<=" | ">" | "<" ;
+
+ActionDecl     = "!", "if", ConditionExpr, "then", Action ;
+Action         = EmitAction | LogAction | SetAction ;
+EmitAction     = "emit", Identifier ;
+LogAction      = "log", String ;
+SetAction      = "set", Identifier, "=", Value ;
+
+BlockPayload   = MultilineJSON ;
+MultilineJSON  = JSONValue ;
+JSONValue      = JSONObject | JSONArray | JSONString | JSONNumber | JSONBool | JSONNull ;
+
+Value          = Number | String | Boolean | Identifier ;
+
+Expr           = AddExpr ;
+AddExpr        = MulExpr, { ("+" | "-") , MulExpr } ;
+MulExpr        = Primary, { ("*" | "/") , Primary } ;
+Primary        = Number | String | Boolean | "null" | IdentChain ;
+IdentChain     = Identifier, { ".", Identifier } ;
+Identifier     = Letter, { Letter | Digit | "_" | "-" } ;
+String         = DQuoted | SQuoted ;
+DQuoted        = '"', { ANY but '"' }, '"' ;
+SQuoted        = "'", { ANY but "'" }, "'" ;
+Number         = Digit, { Digit | "." } ;
+Boolean        = "true" | "false" ;
+
+Letter         = "A"…"Z" | "a"…"z" ;
+Digit          = "0"…"9" ;
+JSONBool       = "true" | "false" ;
+JSONNull       = "null" ;
