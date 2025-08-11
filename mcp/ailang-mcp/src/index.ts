@@ -28,6 +28,7 @@ const assistTool: Tool = {
 };
 
 async function main() {
+  console.warn("[Experimental] This project is an experiment and may change without notice.");
   const server = new Server({
     name: "ailang-mcp",
     version: "0.1.0",

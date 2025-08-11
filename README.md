@@ -2,6 +2,20 @@
 
 A machine-native, declarative, schema-driven language for AI agents. Focused on semantic clarity, probabilistic reasoning hooks, and transformation logic.
 
+> Status: Experimental — APIs, behavior, and interfaces may change without notice.
+>
+> This project is an experiment. Use at your own risk and do not rely on stability.
+
+## Overview
+A lightweight MCP server exposing an `assist` tool that forwards prompts to an AILang backend.
+
+## Getting Started
+- Set `AILANG_SERVER` (defaults to `http://localhost:8790`).
+- Run the server and use the `assist` tool.
+
+## Disclaimer
+This is experimental software and not intended for production use.
+
 Highlights:
 - Tasks (`@task:`), blocks (`%in`, `%model`, `%out`)
 - Graph nodes/edges (`+node`, `->from=>to`) for structure
