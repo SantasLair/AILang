@@ -102,3 +102,6 @@ Example: Let-binding and arithmetic
 let z = x * 2 + obj.y
 !if z >= 10 then emit z
 ```
+
+## License
+MIT License. See [LICENSE](./LICENSE) for details.
