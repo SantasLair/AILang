@@ -1,5 +1,6 @@
 import { strict as assert } from 'assert';
 import { parseSource, execute, parseAndExecuteSource } from '../src/compiler';
+import { compileToBytecode, runBytecode } from '../src/bytecode';
 
 // Bubble sort test
 {
@@ -47,6 +48,22 @@ import { parseSource, execute, parseAndExecuteSource } from '../src/compiler';
   console.log('✓ invalid syntax detection');
 }
 
+// Bytecode parity: bubble sort
+{
+  const src = `
+@bubblesort:
+%in:
+[9,1,5,6,2,5]
+%model:sort{algorithm=bubble}
+%out: sorted
+`.trim();
+  const ast = parseSource(src);
+  const bc = compileToBytecode(ast);
+  const res = runBytecode(bc, [9,1,5,6,2,5]); // also seed input, but model will use it
+  const out = res.outputs['sorted'];
+  assert.deepEqual(out, [1, 2, 5, 5, 6, 9], 'Bytecode output mismatch');
+  console.log('✓ bytecode parity (bubble sort)');
+}
 // Let-binding evaluation
 {
   const src = `

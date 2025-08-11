@@ -8,11 +8,28 @@ Highlights:
 - Conditions (`?`) and actions (`!if ... then ...`)
 - Built-in sort model with bubble sort
 - Minimal let-bindings and expressions (numbers/strings/booleans, + - * /, member access)
+ - Tool requests via `%model:tool{...}` captured into context for an agent to execute
 
 Setup:
 - `npm install`
 - `npm run build`
 - `node dist/src/main.js <file.ailang>`
+- Compile to bytecode: `node dist/src/main.js --compile file.ailang file.albc`
+- Run bytecode: `node dist/src/main.js --runbc file.albc`
+- Pipe from stdin: `type file.ailang | node dist/src/main.js --stdin`
+- REPL: `node dist/src/main.js --repl` (enter program, then a line with `RUN`)
+- Watch-run: `node dist/src/main.js --watch file.ailang`
+
+HTTP server (no dependencies):
+- Start: `npm run serve` (default port 8787)
+- GET /health -> { ok: true }
+- POST /run with body: { "source": "@task..." } or raw text -> { outputs, context }
+- POST /compile with body: { "source": "@task..." } -> { bytecode: base64, bytes }
+- POST /runbc with body: { bytecode: base64 } -> { outputs, context }
+
+PowerShell helper (tools/run-ailang.ps1):
+- Run a program via local server and save results:
+	- `powershell -ExecutionPolicy Bypass -File tools/run-ailang.ps1 -SourcePath examples/sort.ailang -OutJson out.json -CtxJson ctx.json`
 - `npm test`
 
 Grammar (summary):
@@ -51,6 +68,17 @@ Run:
 Notes:
 - The interpreter prefers `ctx.sorted` for `%out` if present, otherwise falls back to `%in` value.
 - Extend `src/compiler.ts` to add more models, richer condition evaluation, and messaging/macros as needed.
+ - Agent pattern: `%model:tool{...}` appends a request into `ctx.__requests` and mirrors it to `ctx.plan`.
+
+Agent usage example:
+```
+@writefile:
+%in:
+{ "file": "examples/out.txt", "content": "hello" }
+%model:tool{name=fs.write, file=file, content=content}
+!if true then emit plan
+```
+An external agent would read `result.context.plan` and perform the fs.write call with resolved args.
 
 Example: Let-binding and arithmetic
 ```

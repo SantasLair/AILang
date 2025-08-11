@@ -376,6 +376,16 @@ function applyModel(model: ModelSpec, ctx: Record<string, any>) {
       ctx.sorted = result;
       break;
     }
+    case 'tool': {
+      // No side-effects here. Capture a request for the outer orchestrator.
+      // Example: %model:tool{name="fs.write", file="path", content="..."}
+      const req = { kind: 'tool', args: { ...model.args } };
+      if (!Array.isArray(ctx.__requests)) ctx.__requests = [];
+      ctx.__requests.push(req);
+      // Provide a conventional planning surface
+      ctx.plan = ctx.__requests;
+      break;
+    }
     default:
       throw new Error(`Unknown model type: ${model.type}`);
   }

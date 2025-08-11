@@ -1,0 +1,5 @@
+@writefile:
+%in:
+{ "file": "examples/out.txt", "content": "hello agent" }
+%model:tool{name=fs.write, file=file, content=content}
+!if true then emit plan
