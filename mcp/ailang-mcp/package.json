@@ -1,0 +1,21 @@
+{
+  "name": "ailang-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "dev": "node --loader ts-node/esm src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+  "@modelcontextprotocol/sdk": "^0.3.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+  "typescript": "^5.5.4",
+  "@types/node": "^20.14.2"
+  }
+}

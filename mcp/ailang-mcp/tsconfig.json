@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "es2022",
+    "target": "es2020",
+    "moduleResolution": "bundler",
+    "rootDir": "src",
+    "resolveJsonModule": true,
+    "strict": true,
+  "types": ["node"]
+  },
+  "include": ["src/**/*"]
+}
